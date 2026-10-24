@@ -41,17 +41,21 @@ python tests/e2e.py
 
 ## GitHub Pages 部署
 
-仓库包含 `.github/workflows/deploy.yml`：
+已发布项目地址：[https://guxy-code.github.io/90day-fitness/](https://guxy-code.github.io/90day-fitness/)。部署与测试记录见 [TESTING.md](TESTING.md)。
 
-1. `main` 分支推送后，运行 Node 内置测试并生成 `dist/`。
-2. 将 `dist/` 作为 Pages artifact 上传。
-3. 使用 GitHub 官方 Actions 发布到 Pages；部署状态和实际网址见 Actions 中的 `deploy` 作业。
+源码保存在 `main`，生产静态文件保存在 `gh-pages`。GitHub Pages 从 `gh-pages` 分支根目录发布；第一次分支推送已成功触发 GitHub 内置的 Pages 构建与部署。
 
-默认项目地址：`https://guxy-code.github.io/90day-fitness/`。此地址只有在 Pages 部署成功后才可访问。
+更新源码后：
 
-工作流通过 `actions/configure-pages` 的 `enablement: true` 尝试自动启用 Pages。如果新仓库尚未启用 Pages，且默认 `GITHUB_TOKEN` 没有创建 Pages 站点所需的权限，仓库管理员需要在 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**，再在 Actions 页面重新运行工作流。工作流部署需要 `pages: write` 和 `id-token: write`，这些权限已在部署作业配置。
+```bash
+npm run deploy
+```
 
-拉取请求只测试和构建，不执行部署。部署日志、状态和站点可访问性才代表完成发布；仓库中存在工作流不代表站点已经上线。
+此命令会运行测试和构建、获取最新生产分支、创建临时 worktree、提交生产文件并推送到 `gh-pages`，然后由 GitHub 内置 Pages 流程发布。不会强制推送；远端有并发更新时会拒绝覆盖。需要本机 Git 已有该仓库的写入凭据。推送成功后仍需查看 Actions 中 `pages build and deployment` 的完成状态。
+
+`.github/workflows/deploy.yml` 会在 `main` 推送和拉取请求时自动运行 19 项领域/PWA 测试、构建和 9 组浏览器验收，上传生产构建与截图报告。主分支 CI 不尝试更改 GitHub Pages 管理设置。
+
+本仓库的 `github-pages` 环境仅允许生产分支发布。当前 GitHub 连接可以写入源码，但未申请 Pages 管理权限，因此直接从 `main` 使用 Pages API 首次创建站点或部署会失败；实际已验证成功的发布路径是推送生产分支。
 
 ## 安装与离线
 

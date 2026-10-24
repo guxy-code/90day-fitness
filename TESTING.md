@@ -24,17 +24,12 @@
 
 ## 发布状态
 
-源码已成功推送到 `main`，生产静态文件也已推送到 `gh-pages`。GitHub Actions 的 19 项单元/PWA 测试和 9 组浏览器验收全部通过。Pages 尚未上线，访问仍为 HTTP 404。
+已发布：https://guxy-code.github.io/90day-fitness/ （已实际验证 HTTP 200）。
 
-已验证的 CI 运行：https://github.com/guxy-code/90day-fitness/actions/runs/40114906192 。仅 deploy 作业失败：默认 `GITHUB_TOKEN` 首次创建 Pages 时返回 403。
+- 源码已推送到 `main`，生产静态文件已推送到 `gh-pages`。
+- GitHub Actions 的 19 项单元/PWA 测试与 9 组浏览器验收均通过。
+- Pages 发布成功：https://github.com/guxy-code/90day-fitness/actions/runs/40115177152 。
+- 线上全部 12 项生产资源已通过 HTTPS 下载并与本地构建逐字节哈希核对，完全一致。
+- 应用支持 HTTPS、项目子路径、主屏幕安装及离线读写。
 
-安装仓库应用之前，已实际尝试的远程操作：
-
-- GitHub 连接创建 blob 和文件：HTTP 403，`Resource not accessible by integration`。
-- GitHub CLI 创建 blob：相同的 HTTP 403。
-- HTTPS Git push：`Permission to guxy-code/90day-fitness.git denied to guxy-code`，HTTP 403。
-- GitHub CLI 创建 Pages 站点：HTTP 403，`Resource not accessible by integration`。
-
-仓库应用安装后，Git 推送已恢复正常。已核实 ChatGPT Codex Connector 的应用权限包含 contents / workflows 写入，但不含 Pages 管理权限。直接创建 Pages 仍返回 403；推送 `gh-pages` 分支也不会自动启用站点。
-
-唯一剩余步骤：仓库管理员在 https://github.com/guxy-code/90day-fitness/settings/pages 将 Source 选择为 GitHub Actions。之后重新运行上方 CI 的失败 deploy 作业，即可使用已测试并上传的产物部署，无需重做开发。
+首次发布时，连接令牌无法直接创建 Pages（403）。安装仓库应用后恢复了 Git 写入；推送 `gh-pages` 生产分支触发 GitHub 内置 Pages 构建，成功完成了站点初始化与发布。原主分支部署作业随后被 `github-pages` 的生产分支保护规则拒绝。现已统一采用 `npm run deploy` 推送 `gh-pages`、由内置 Pages 流程发布的路径；主分支 CI 保留测试、构建和验收，不再触发失效的部署作业。

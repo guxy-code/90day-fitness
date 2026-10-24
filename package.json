@@ -4,12 +4,15 @@
   "private": true,
   "type": "module",
   "description": "可离线使用的 90 天减脂塑形计划与健康记录 PWA",
-  "engines": { "node": ">=24" },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "dev": "node scripts/serve.mjs --dir .",
     "build": "node scripts/build.mjs",
     "preview": "node scripts/serve.mjs --dir dist",
     "test": "node --test --test-isolation=none tests/*.test.js",
-    "check": "npm test && npm run build"
+    "check": "npm test && npm run build",
+    "deploy": "node scripts/publish.mjs"
   }
 }

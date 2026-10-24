@@ -1,0 +1,2 @@
+# Browser testing only; the PWA has no runtime dependencies.
+playwright==1.62.0
